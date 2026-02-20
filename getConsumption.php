@@ -15,7 +15,10 @@ $user_id = getAuthenticatedUserId($db_con);
 
 // My habitat consumption
 $stmt = mysqli_prepare($db_con,
-    "SELECT COALESCE(SUM(wattage), 0) AS total_wattage FROM Appliance WHERE id_user = ?");
+    "SELECT COALESCE(SUM(a.wattage), 0) AS total_wattage
+     FROM Appliance a
+     JOIN Habitat h ON h.id = a.id_habitat
+     WHERE h.id_user = ?");
 mysqli_stmt_bind_param($stmt, "i", $user_id);
 mysqli_stmt_execute($stmt);
 $result           = mysqli_stmt_get_result($stmt);
@@ -32,7 +35,7 @@ $result               = mysqli_query($db_con,
     "SELECT h.id AS habitat_id, h.floor, h.area,
             COALESCE(SUM(a.wattage), 0) AS total_wattage
      FROM Habitat h
-     LEFT JOIN Appliance a ON a.id_user = h.id_user
+     LEFT JOIN Appliance a ON a.id_habitat = h.id
      GROUP BY h.id, h.floor, h.area
      ORDER BY h.id");
 

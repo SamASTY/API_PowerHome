@@ -16,8 +16,9 @@ if ($method === 'GET') {
                 ts.begin_time, ts.end_time, ts.max_wattage
          FROM Booking b
          JOIN Appliance a ON a.id = b.id_appliance
+         JOIN Habitat h   ON h.id = a.id_habitat
          JOIN TimeSlot ts ON ts.id = b.id_time_slot
-         WHERE a.id_user = ?
+         WHERE h.id_user = ?
          ORDER BY ts.begin_time");
     mysqli_stmt_bind_param($stmt, "i", $user_id);
     mysqli_stmt_execute($stmt);
@@ -44,7 +45,9 @@ if ($method === 'GET') {
 
     // Verify appliance belongs to authenticated user
     $stmt = mysqli_prepare($db_con,
-        "SELECT id FROM Appliance WHERE id = ? AND id_user = ?");
+        "SELECT a.id FROM Appliance a
+         JOIN Habitat h ON h.id = a.id_habitat
+         WHERE a.id = ? AND h.id_user = ?");
     mysqli_stmt_bind_param($stmt, "ii", $appliance_id, $user_id);
     mysqli_stmt_execute($stmt);
     $result = mysqli_stmt_get_result($stmt);
@@ -100,7 +103,8 @@ if ($method === 'GET') {
     $stmt = mysqli_prepare($db_con,
         "DELETE b FROM Booking b
          JOIN Appliance a ON a.id = b.id_appliance
-         WHERE b.id_appliance = ? AND b.id_time_slot = ? AND a.id_user = ?");
+         JOIN Habitat h   ON h.id = a.id_habitat
+         WHERE b.id_appliance = ? AND b.id_time_slot = ? AND h.id_user = ?");
     mysqli_stmt_bind_param($stmt, "iii", $appliance_id, $time_slot_id, $user_id);
     if (mysqli_stmt_execute($stmt)) {
         if (mysqli_stmt_affected_rows($stmt) > 0) {

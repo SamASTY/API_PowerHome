@@ -29,7 +29,10 @@ if (!$habitat) {
 }
 
 $stmt = mysqli_prepare($db_con,
-    "SELECT id, name, reference, wattage FROM Appliance WHERE id_user = ?");
+    "SELECT a.id, a.name, a.reference, a.wattage
+     FROM Appliance a
+     JOIN Habitat h ON h.id = a.id_habitat
+     WHERE h.id_user = ?");
 mysqli_stmt_bind_param($stmt, "i", $user_id);
 mysqli_stmt_execute($stmt);
 $result = mysqli_stmt_get_result($stmt);
