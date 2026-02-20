@@ -1,4 +1,5 @@
 <?php
+global $db_con;
 require_once 'DatabaseConnection.php';
 
 header('Content-Type: application/json');

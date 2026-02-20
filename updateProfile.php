@@ -1,4 +1,5 @@
 <?php
+global $db_con;
 require_once 'DatabaseConnection.php';
 require_once 'auth_helper.php';
 

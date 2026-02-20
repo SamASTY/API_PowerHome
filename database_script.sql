@@ -25,8 +25,8 @@ CREATE TABLE Appliance
     name      VARCHAR(50) NOT NULL,
     reference VARCHAR(50) NOT NULL UNIQUE,
     wattage   INT         NOT NULL,
-    id_user   INT,
-    FOREIGN KEY (id_user) REFERENCES User (id) ON DELETE SET NULL
+    id_habitat  INT,
+    FOREIGN KEY (id_habitat) REFERENCES Habitat (id) ON DELETE SET NULL
 );
 
 CREATE TABLE TimeSlot
