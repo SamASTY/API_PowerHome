@@ -11,7 +11,10 @@ $method  = $_SERVER['REQUEST_METHOD'];
 if ($method === 'GET') {
 
     $stmt = mysqli_prepare($db_con,
-        "SELECT id, name, reference, wattage FROM Appliance WHERE id_user = ?");
+        "SELECT a.id, a.name, a.reference, a.wattage
+         FROM Appliance a
+         JOIN Habitat h ON h.id = a.id_habitat
+         WHERE h.id_user = ?");
     mysqli_stmt_bind_param($stmt, "i", $user_id);
     mysqli_stmt_execute($stmt);
     $result     = mysqli_stmt_get_result($stmt);
@@ -37,10 +40,18 @@ if ($method === 'GET') {
     }
 
     $stmt = mysqli_prepare($db_con,
-        "INSERT INTO Appliance (name, reference, wattage, id_user) VALUES (?, ?, ?, ?)");
+        "INSERT INTO Appliance (name, reference, wattage, id_habitat)
+         SELECT ?, ?, ?, h.id FROM Habitat h WHERE h.id_user = ? ORDER BY h.id ASC LIMIT 1");
     mysqli_stmt_bind_param($stmt, "ssii", $name, $reference, $wattage, $user_id);
     if (mysqli_stmt_execute($stmt)) {
         $id = mysqli_insert_id($db_con);
+        if ($id === 0) {
+            http_response_code(422);
+            echo json_encode(['error' => 'No habitat found for this user']);
+            mysqli_stmt_close($stmt);
+            mysqli_close($db_con);
+            exit;
+        }
         http_response_code(201);
         echo json_encode([
             'id'        => $id,
@@ -67,7 +78,9 @@ if ($method === 'GET') {
     }
 
     $stmt = mysqli_prepare($db_con,
-        "DELETE FROM Appliance WHERE id = ? AND id_user = ?");
+        "DELETE a FROM Appliance a
+         JOIN Habitat h ON h.id = a.id_habitat
+         WHERE a.id = ? AND h.id_user = ?");
     mysqli_stmt_bind_param($stmt, "ii", $appliance_id, $user_id);
     if (mysqli_stmt_execute($stmt)) {
         if (mysqli_stmt_affected_rows($stmt) > 0) {

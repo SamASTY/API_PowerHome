@@ -20,23 +20,23 @@ VALUES (2, 65, 1),  -- Marie Dupont, 2ème étage, 65m²
 -- Thomas Moreau, 1er étage, 85m²
 
 -- 3. Appareils électroménagers
-INSERT INTO Appliance (name, reference, wattage, id_user)
+INSERT INTO Appliance (name, reference, wattage, id_habitat)
 VALUES
--- Appareils de Marie (id_user=1)
+-- Appareils de Marie (id_habitat=1)
 ('Lave-linge', 'LL-Samsung-WM65', 2000, 1),
 ('Réfrigérateur', 'REF-Bosch-KGN36', 150, 1),
 ('Micro-ondes', 'MO-Sharp-R280', 900, 1),
 
--- Appareils de Pierre (id_user=2)
+-- Appareils de Pierre (id_habitat=2)
 ('Climatiseur', 'CLIM-Daikin-ARC466', 3500, 2),
 ('Sèche-linge', 'SL-Bosch-WTH852', 2600, 2),
 ('Aspirateur', 'ASP-Dyson-V11', 900, 2),
 
--- Appareils de Sophie (id_user=3)
+-- Appareils de Sophie (id_habitat=3)
 ('Four électrique', 'FOUR-Electrolux-EOS', 3200, 3),
 ('Plaques induction', 'PLAQUES-Siemens-EX875', 7200, 3),
 
--- Appareils de Thomas (id_user=4)
+-- Appareils de Thomas (id_habitat=4)
 ('Chauffe-eau', 'CE-Ariston-80L', 2000, 4),
 ('Congélateur', 'CONG-Liebherr-GP1213', 120, 4);
 
