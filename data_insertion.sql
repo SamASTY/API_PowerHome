@@ -7,8 +7,8 @@ INSERT INTO User (firstname, lastname, email, password)
 VALUES ('Marie', 'Dupont', 'marie.dupont@email.com', '$2y$10$c.hVMl5yMkrdm0aaeiwIuOezQKV8CH2qTM6wanWLPg/XPqobEW65e'), -- AZERTY123qs
        ('Pierre', 'Martin', 'pierre.martin@email.com', '$2y$10$GN/m8QQxHfXDJ05AE8FH.eDH4enPmg3FxOf9R3BTKebQ1PVf9QqdW'), -- CQFDenft1234
        ('Sophie', 'Leroy', 'sophie.leroy@email.com', '$2y$10$49NOVsvRNmepX83rQq2KlecWhRKVvlivYbKxy0qxSEATmEgGf/SfO'), -- MOTdePASSE123
-       ('Thomas', 'Moreau', 'thomas.moreau@email.com', '$2y$10$Uo5s1Bb1a/u6h.EWn4oKWOP90dZhqCabRidwpimEcLWZhVzoLLopa'); -- LNeesrb5856S4s248sd59SnuJ6sfv5B2GGerb
-
+       ('Thomas', 'Moreau', 'thomas.moreau@email.com', '$2y$10$Uo5s1Bb1a/u6h.EWn4oKWOP90dZhqCabRidwpimEcLWZhVzoLLopa'), -- LNeesrb5856S4s248sd59SnuJ6sfv5B2GGerb
+       ('TEST', 'TEST', 'TEST', '$2y$10$MqtZjMEYoZ8gq0sZhJNdkegWtmuffbJ4WES2Lxr8/SsZdgik0Lxd2'); -- TEST
 -- Vérification: SELECT * FROM User;
 
 -- 2. Habitats (appartements/maisons)
