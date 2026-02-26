@@ -78,12 +78,18 @@ if ($method === 'GET') {
     $stmt      = mysqli_prepare($db_con,
         "INSERT INTO Booking (id_appliance, id_time_slot, order_ref) VALUES (?, ?, ?)");
     mysqli_stmt_bind_param($stmt, "iis", $appliance_id, $time_slot_id, $order_ref);
-    if (mysqli_stmt_execute($stmt)) {
+    try {
+        mysqli_stmt_execute($stmt);
         http_response_code(201);
         echo json_encode(['message' => 'Booking created', 'order_ref' => $order_ref]);
-    } else {
-        http_response_code(409);
-        echo json_encode(['error' => 'Booking already exists or could not be created']);
+    } catch (mysqli_sql_exception $e) {
+        if ($e->getCode() === 1062) {
+            http_response_code(409);
+            echo json_encode(['error' => 'Booking already exists or could not be created']);
+        } else {
+            http_response_code(500);
+            echo json_encode(['error' => 'Booking could not be created']);
+        }
     }
     mysqli_stmt_close($stmt);
 
