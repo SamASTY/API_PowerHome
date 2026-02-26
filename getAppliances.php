@@ -43,7 +43,8 @@ if ($method === 'GET') {
         "INSERT INTO Appliance (name, reference, wattage, id_habitat)
          SELECT ?, ?, ?, h.id FROM Habitat h WHERE h.id_user = ? ORDER BY h.id ASC LIMIT 1");
     mysqli_stmt_bind_param($stmt, "ssii", $name, $reference, $wattage, $user_id);
-    if (mysqli_stmt_execute($stmt)) {
+    try {
+        mysqli_stmt_execute($stmt);
         $id = mysqli_insert_id($db_con);
         if ($id === 0) {
             http_response_code(422);
@@ -59,9 +60,14 @@ if ($method === 'GET') {
             'reference' => $reference,
             'wattage'   => $wattage,
         ]);
-    } else {
-        http_response_code(409);
-        echo json_encode(['error' => 'Could not add appliance. The reference may already exist.']);
+    } catch (mysqli_sql_exception $e) {
+        if ($e->getCode() === 1062) {
+            http_response_code(409);
+            echo json_encode(['error' => 'Could not add appliance. The reference may already exist.']);
+        } else {
+            http_response_code(500);
+            echo json_encode(['error' => 'Could not add appliance']);
+        }
     }
     mysqli_stmt_close($stmt);
 
