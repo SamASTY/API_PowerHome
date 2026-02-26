@@ -51,7 +51,7 @@ mysqli_stmt_close($stmt);
 
 $cnt = (int)($row['cnt'] ?? 0);
 
-if ($cnt != 0) { // or: if ($cnt > 0)
+if ($cnt != 0) {
     http_response_code(404);
     echo json_encode(['error' => 'existing habitat for this user']);
     mysqli_close($db_con);
