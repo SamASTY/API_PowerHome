@@ -31,15 +31,13 @@ CREATE TABLE Appliance
 
 CREATE TABLE TimeSlot
 (
-    id          INT AUTO_INCREMENT PRIMARY KEY,
-    begin_time  DATETIME NOT NULL,
-    end_time    DATETIME NOT NULL,
-    max_wattage INT      NOT NULL CHECK (max_wattage >= 0),
+    id              INT AUTO_INCREMENT PRIMARY KEY,
+    begin_time      DATETIME NOT NULL,
+    end_time        DATETIME NOT NULL,
+    max_wattage     INT      NOT NULL CHECK (max_wattage >= 0),
+    current_wattage INT DEFAULT 0 CHECK (current_wattage <= max_wattage ),
     INDEX idx_timeslot_range (begin_time, end_time)
 );
-
-ALTER TABLE TimeSlot
-    ADD CONSTRAINT chk_used_wattage_nonnegative CHECK (max_wattage >= 0);
 
 CREATE TABLE Booking
 (
@@ -64,7 +62,7 @@ BEGIN
     WHERE b.id_time_slot = p_time_slot_id;
 
     UPDATE TimeSlot
-    SET max_wattage = v_used
+    SET current_wattage = v_used
     WHERE id = p_time_slot_id;
 END;
 
