@@ -43,7 +43,6 @@ if ($method === 'GET') {
         exit;
     }
 
-    // Verify appliance belongs to authenticated user
     $stmt = mysqli_prepare($db_con,
         "SELECT a.id FROM Appliance a
          JOIN Habitat h ON h.id = a.id_habitat
