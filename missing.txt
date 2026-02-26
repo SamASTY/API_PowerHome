@@ -1,0 +1,2 @@
+getAllAppliances.php
+upd password in upd profile
