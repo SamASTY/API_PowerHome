@@ -35,7 +35,6 @@ if (!$user || !password_verify($password, $user['password'])) {
     exit;
 }
 
-// Reuse a valid token or generate a new one
 if (!$user['token'] || strtotime($user['expired_at']) < time()) {
     $token  = bin2hex(random_bytes(32));
     $expire = date('Y-m-d H:i:s', strtotime('+30 days'));

@@ -20,27 +20,61 @@ if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
 }
 
 try {
-    // Auth (required)
-    $user_id = getAuthenticatedUserId($db_con);
+    // If this endpoint should be public/admin-only, keep auth but don't filter by user.
+    // Remove this line if you truly want it public.
+    getAuthenticatedUserId($db_con);
 
-    $stmt = mysqli_prepare($db_con, "SELECT id, floor, area FROM Habitat");
+    $sql = "
+        SELECT
+            h.id AS habitat_id,
+            h.id_user AS habitat_id_user,
+            h.floor AS habitat_floor,
+            h.area AS habitat_area,
+
+            a.id AS appliance_id,
+            a.name AS appliance_name,
+            a.reference AS appliance_reference,
+            a.wattage AS appliance_wattage
+        FROM Habitat h
+        LEFT JOIN Appliance a ON a.id_habitat = h.id
+        ORDER BY h.id, a.id
+    ";
+
+    $stmt = mysqli_prepare($db_con, $sql);
     mysqli_stmt_execute($stmt);
     $result = mysqli_stmt_get_result($stmt);
 
-    $habitats = [];
+    $habitatsById = [];
+
     while ($row = mysqli_fetch_assoc($result)) {
-        // ensure numeric fields are numbers in JSON (optional but nice)
-        $row['id'] = (int)$row['id'];
-        $row['floor'] = (int)$row['floor'];
-        $row['area'] = (int)$row['area'];
-        $habitats[] = $row;
+        $hid = (int)$row['habitat_id'];
+
+        if (!isset($habitatsById[$hid])) {
+            $habitatsById[$hid] = [
+                'id' => $hid,
+                'id_user' => (int)$row['habitat_id_user'],
+                'floor' => (int)$row['habitat_floor'],
+                'area' => (int)$row['habitat_area'],
+                'appliances' => []
+            ];
+        }
+
+        // appliance_id will be NULL when a habitat has no appliances (because LEFT JOIN)
+        if ($row['appliance_id'] !== null) {
+            $habitatsById[$hid]['appliances'][] = [
+                'id' => (int)$row['appliance_id'],
+                'name' => $row['appliance_name'],
+                'reference' => $row['appliance_reference'],
+                'wattage' => (int)$row['appliance_wattage']
+            ];
+        }
     }
 
     mysqli_stmt_close($stmt);
 
     echo json_encode([
         'success' => true,
-        'data' => $habitats
+        'data' => array_values($habitatsById)
     ]);
 
 } catch (Throwable $e) {
@@ -51,7 +85,6 @@ try {
             'code' => 'SERVER_ERROR',
             'message' => 'Internal server error'
         ]
-        // Don't expose $e->getMessage() in production
     ]);
 } finally {
     if (isset($db_con) && $db_con instanceof mysqli) {
