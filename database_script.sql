@@ -20,6 +20,11 @@ CREATE TABLE Habitat
     FOREIGN KEY (id_user) REFERENCES User (id) ON DELETE SET NULL
 );
 
+Create table ApplianceType
+(
+    id   INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(50) NOT NULL UNIQUE
+);
 
 CREATE TABLE Appliance
 (
@@ -28,8 +33,11 @@ CREATE TABLE Appliance
     reference  VARCHAR(50) NOT NULL UNIQUE,
     wattage    INT         NOT NULL,
     id_habitat INT,
-    FOREIGN KEY (id_habitat) REFERENCES Habitat (id) ON DELETE SET NULL
+    id_type    INT,
+    FOREIGN KEY (id_type) REFERENCES ApplianceType (id),
+    FOREIGN KEY (id_habitat) REFERENCES Habitat (id)
 );
+
 
 CREATE TABLE TimeSlot
 (

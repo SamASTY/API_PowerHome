@@ -25,19 +25,24 @@ try {
     getAuthenticatedUserId($db_con);
 
     $sql = "
-        SELECT
+       SELECT
+            u.firstname AS name,
+            u.lastname AS lastname,
             h.id AS habitat_id,
-            h.id_user AS habitat_id_user,
+            h.id_user AS id_user,
             h.floor AS habitat_floor,
             h.area AS habitat_area,
-
+        
             a.id AS appliance_id,
+            ta.name AS appliance_type,
             a.name AS appliance_name,
             a.reference AS appliance_reference,
             a.wattage AS appliance_wattage
         FROM Habitat h
-        LEFT JOIN Appliance a ON a.id_habitat = h.id
-        ORDER BY h.id, a.id
+                 LEFT JOIN Appliance a ON a.id_habitat = h.id
+                 INNER JOIN appliancetype ta ON ta.id = a.id_type
+                 INNER JOIN User u ON u.id = h.id_user
+        ORDER BY lastname
     ";
 
     $stmt = mysqli_prepare($db_con, $sql);
@@ -52,7 +57,9 @@ try {
         if (!isset($habitatsById[$hid])) {
             $habitatsById[$hid] = [
                 'id' => $hid,
-                'id_user' => (int)$row['habitat_id_user'],
+                'name' => $row['name'],
+                'lastname' => $row['lastname'],
+                'id_user' => (int)$row['id_user'],
                 'floor' => (int)$row['habitat_floor'],
                 'area' => (int)$row['habitat_area'],
                 'appliances' => []
@@ -63,6 +70,7 @@ try {
         if ($row['appliance_id'] !== null) {
             $habitatsById[$hid]['appliances'][] = [
                 'id' => (int)$row['appliance_id'],
+                'type'=> $row['appliance_type'],
                 'name' => $row['appliance_name'],
                 'reference' => $row['appliance_reference'],
                 'wattage' => (int)$row['appliance_wattage']

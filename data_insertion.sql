@@ -25,25 +25,44 @@ VALUES (2, 65, 1),  -- Marie Dupont, 2ème étage, 65m²
 -- Thomas Moreau, 1er étage, 85m²
 
 -- 3. Appareils électroménagers
-INSERT INTO Appliance (name, reference, wattage, id_habitat)
+-- 3. Appliance types (NEW)
+INSERT INTO ApplianceType (name)
 VALUES
--- Appareils de Marie (id_habitat=1)
-('Lave-linge', 'LL-Samsung-WM65', 2000, 1),
-('Réfrigérateur', 'REF-Bosch-KGN36', 150, 1),
-('Micro-ondes', 'MO-Sharp-R280', 900, 1),
+    ('Iron'),
+    ('Vacuum'),
+    ('Washing Machine'),
+    ('AirConditionner');
 
--- Appareils de Pierre (id_habitat=2)
-('Climatiseur', 'CLIM-Daikin-ARC466', 3500, 2),
-('Sèche-linge', 'SL-Bosch-WTH852', 2600, 2),
-('Aspirateur', 'ASP-Dyson-V11', 900, 2),
+-- 4. Appliances (UPDATED for new schema with id_type)
+-- Notes:
+-- - name is kept equal to the type name (simple + consistent)
+-- - reference values are unique
+-- - wattage values are realistic-ish
+INSERT INTO Appliance (name, reference, wattage, id_habitat, id_type)
+VALUES
+-- Habitat 1 (Marie)
+('Washing Machine',   'WM-Samsung-WM65',     2000, 1,
+ (SELECT id FROM ApplianceType WHERE name='Washing Machine')),
+('Vacuum',            'VAC-Dyson-V11',        900, 1,
+ (SELECT id FROM ApplianceType WHERE name='Vacuum')),
+('Iron',              'IRON-Philips-GC1740', 2000, 1,
+ (SELECT id FROM ApplianceType WHERE name='Iron')),
 
--- Appareils de Sophie (id_habitat=3)
-('Four électrique', 'FOUR-Electrolux-EOS', 3200, 3),
-('Plaques induction', 'PLAQUES-Siemens-EX875', 7200, 3),
+-- Habitat 2 (Pierre)
+('AirConditionner',   'AC-Daikin-ARC466',    3500, 2,
+ (SELECT id FROM ApplianceType WHERE name='AirConditionner')),
+('Vacuum',            'VAC-Bosch-BGS05',      700, 2,
+ (SELECT id FROM ApplianceType WHERE name='Vacuum')),
 
--- Appareils de Thomas (id_habitat=4)
-('Chauffe-eau', 'CE-Ariston-80L', 2000, 4),
-('Congélateur', 'CONG-Liebherr-GP1213', 120, 4);
+-- Habitat 3 (Sophie)
+('Iron',              'IRON-Tefal-FV1710',   1800, 3,
+ (SELECT id FROM ApplianceType WHERE name='Iron')),
+('Washing Machine',   'WM-LG-F2V5',          2100, 3,
+ (SELECT id FROM ApplianceType WHERE name='Washing Machine')),
+
+-- Habitat 4 (Thomas)
+('AirConditionner',   'AC-Mitsubishi-MS',    3000, 4,
+ (SELECT id FROM ApplianceType WHERE name='AirConditionner'));
 
 -- 4. Créneaux horaires disponibles (disponibles pour réservation)
 INSERT INTO TimeSlot (begin_time, end_time, max_wattage)
@@ -64,17 +83,13 @@ VALUES
 
 INSERT INTO Booking (id_appliance, id_time_slot, order_ref)
 VALUES
--- Marie réserve lave-linge lundi matin
 (1, 1, 'REF-20260223-001'),
 
--- Pierre réserve climatiseur lundi soir (heures creuses)
-(4, 3, 'REF-20260223-002'),
+(2, 3, 'REF-20260223-002'),
 
--- Sophie réserve plaques mardi matin
-(8, 4, 'REF-20260224-001'),
+(3, 4, 'REF-20260224-001'),
 
--- Thomas réserve chauffe-eau mardi soir
-(10, 6, 'REF-20260224-002')
+(4, 6, 'REF-20260224-002')
 ;
 
 
