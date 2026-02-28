@@ -1,12 +1,14 @@
 CREATE TABLE User
 (
-    id         INT AUTO_INCREMENT PRIMARY KEY,
-    firstname  VARCHAR(50)  NOT NULL,
-    lastname   VARCHAR(50)  NOT NULL,
-    email      VARCHAR(100) NOT NULL UNIQUE,
-    password   VARCHAR(255) NOT NULL, -- hashed
-    token      VARCHAR(255),
-    expired_at DATETIME
+    id          INT AUTO_INCREMENT PRIMARY KEY,
+    firstname   VARCHAR(50)  NOT NULL,
+    lastname    VARCHAR(50)  NOT NULL,
+    email       VARCHAR(100) NOT NULL UNIQUE,
+    phoneCode   Varchar(3)   NOT NULL,
+    phoneNumber varchar(15)  NOT NULL,
+    password    VARCHAR(255) NOT NULL, -- hashed
+    token       VARCHAR(255),
+    expired_at  DATETIME
 );
 
 CREATE TABLE Habitat

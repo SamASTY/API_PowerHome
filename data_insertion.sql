@@ -3,13 +3,18 @@
 -- ========================================
 
 -- 1. Utilisateurs (propriétaires d'habitats)
-INSERT INTO User (firstname, lastname, email, password)
-VALUES ('Marie', 'Dupont', 'marie.dupont@email.com', '$2y$10$c.hVMl5yMkrdm0aaeiwIuOezQKV8CH2qTM6wanWLPg/XPqobEW65e'), -- AZERTY123qs
-       ('Pierre', 'Martin', 'pierre.martin@email.com', '$2y$10$GN/m8QQxHfXDJ05AE8FH.eDH4enPmg3FxOf9R3BTKebQ1PVf9QqdW'), -- CQFDenft1234
-       ('Sophie', 'Leroy', 'sophie.leroy@email.com', '$2y$10$49NOVsvRNmepX83rQq2KlecWhRKVvlivYbKxy0qxSEATmEgGf/SfO'), -- MOTdePASSE123
-       ('Thomas', 'Moreau', 'thomas.moreau@email.com', '$2y$10$Uo5s1Bb1a/u6h.EWn4oKWOP90dZhqCabRidwpimEcLWZhVzoLLopa'), -- LNeesrb5856S4s248sd59SnuJ6sfv5B2GGerb
-       ('TEST', 'TEST', 'TEST', '$2y$10$MqtZjMEYoZ8gq0sZhJNdkegWtmuffbJ4WES2Lxr8/SsZdgik0Lxd2'); -- TEST
--- Vérification: SELECT * FROM User;
+INSERT INTO User (firstname, lastname, email, password, phoneCode, phoneNumber)
+VALUES ('Marie', 'Dupont', 'marie.dupont@email.com', '$2y$10$t0qImsuc9NiEi.R1C3AIle/5poZPnuDnl2JMHOoqc/qzIFSMqoOWC',
+        '+33', '1234567890'), -- AZERTY123qs
+       ('Pierre', 'Martin', 'pierre.martin@email.com', '$2y$10$AZRzkJR4fod3FJwEgdHm/e81bv6x1aUF2uzHWqlMWuXcpsmCF6Z96',
+        '+33', '1234567890'), -- CQFDenft1234
+       ('Sophie', 'Leroy', 'sophie.leroy@email.com', '$2y$10$YRVKk8BuL0Zu62vSeaLOz.975OvRvfPlJbbRulW9stRgfn9Ad1j8W',
+        '+33', '1234567890'), -- MOTdePASSE123
+       ('Thomas', 'Moreau', 'thomas.moreau@email.com', '$2y$10$dYde79bs1soh38DClbOBYeUuhzS1tuBN/4LQSZ4m/MYrfgO/2CgJm',
+        '+33', '1234567890'), -- LNeesrb5856S4s248sd59SnuJ6sfv5B2GGerb
+       ('Jean-Luc', 'Testard', 'jean-luc.testard@email.com',
+        '$2y$10$9R593nycKIbxsEUJJ5Mc1.KmVsPFTe8l796h5NCnv/HAfMycwZr2C', '+33', '1234567890');
+-- TestPass123! ✓-- Vérification: SELECT * FROM User;
 
 -- 2. Habitats (appartements/maisons)
 INSERT INTO Habitat (floor, area, id_user)
