@@ -9,8 +9,8 @@
  *   getAppliances.php GET|POST|DELETE /appliances
  *   bookings.php      GET|POST|DELETE /bookings
  *   getConsumption.php GET /consumption
- *   getHabitat.php    GET /habitat
- *   getResidents.php  GET /residents
+ *   getUser.php    GET /habitat
+ *   getUser.php  GET /residents
  *   getTimeSlots.php  GET /time-slots
  *
  * Authentication is enforced inside each handler (via auth_helper.php) except
@@ -58,8 +58,8 @@ $routes = [
     'POST /bookings'        => 'bookings.php',
     'DELETE /bookings'      => 'bookings.php',
     'GET /consumption'      => 'getConsumption.php',
-    'GET /habitat'          => 'getHabitat.php',
-    'GET /residents'        => 'getResidents.php',
+    'GET /habitat'          => 'getUser.php',
+    'GET /residents'        => 'getUser.php',
     'GET /time-slots'       => 'getTimeSlots.php',
 ];
 
